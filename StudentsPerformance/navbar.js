@@ -16,13 +16,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="evolution">Grades Evolution</a>
+                            <a class="nav-link" href="grades">Grades</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="grades">Grades Variability</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="students">Students Stats</a>
+                            <a class="nav-link" href="students">Students</a>
                         </li>
                     </ul>
                 </div>

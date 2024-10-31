@@ -80,7 +80,7 @@
         ],
         "values": {
             "0": "none",
-            "1": "primary education (4th grade)",
+            "1": "4th grade",
             "2": "5th to 9th grade",
             "3": "secondary education",
             "4": "higher education"
@@ -100,7 +100,7 @@
         "values": {
             "teacher": "Teacher",
             "health": "Health Care Related",
-            "services": "Civil Services (e.g. administrative or police)",
+            "services": "Civil Services",
             "at_home": "At Home",
             "other": "Other"
         }

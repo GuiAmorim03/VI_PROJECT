@@ -1,0 +1,287 @@
+[
+    {
+        "attributes": [
+            {
+                "key": "school",
+                "description": "School"
+            }
+        ],
+        "values": {
+            "GP": "Gabriel Pereira",
+            "MS": "Mouzinho da Silveira"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "sex",
+                "description": "Sex"
+            }
+        ],
+        "values": {
+            "F": "Female",
+            "M": "Male"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "age",
+                "description": "Age"
+            }
+        ]
+    },
+    {
+        "attributes": [
+            {
+                "key": "address",
+                "description": "Home Address Type"
+            }
+        ],
+        "values": {
+            "U": "Urban",
+            "R": "Rural"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "famsize",
+                "description": "Family Size"
+            }
+        ],
+        "values": {
+            "LE3": "Less or equal to 3",
+            "GT3": "Greater than 3"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "Pstatus",
+                "description": "Parent's Cohabitation Status"
+            }
+        ],
+        "values": {
+            "T": "Living together",
+            "A": "Living Apart"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "Medu",
+                "description": "Mother's Education"
+            },
+            {
+                "key": "Fedu",
+                "description": "Father's Education"
+            }
+        ],
+        "values": {
+            "0": "none",
+            "1": "primary education (4th grade)",
+            "2": "5th to 9th grade",
+            "3": "secondary education",
+            "4": "higher education"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "Mjob",
+                "description": "Mother's Job"
+            },
+            {
+                "key": "Fjob",
+                "description": "Father's Job"
+            }
+        ],
+        "values": {
+            "teacher": "Teacher",
+            "health": "Health Care Related",
+            "services": "Civil Services (e.g. administrative or police)",
+            "at_home": "At Home",
+            "other": "Other"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "reason",
+                "description": "Reason to choose this school"
+            }
+        ],
+        "values": {
+            "home": "Close to home",
+            "reputation": "Reputation of the school",
+            "course": "Course preference",
+            "other": "Other"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "guardian",
+                "description": "Student's Guardian"
+            }
+        ],
+        "values": {
+            "mother": "Mother",
+            "father": "Father",
+            "other": "Other"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "traveltime",
+                "description": "Home to School Travel Time"
+            }
+        ],
+        "values": {
+            "1": "< 15 min",
+            "2": "15 to 30 min",
+            "3": "30 min to 1 hour",
+            "4": "> 1 hour"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "studytime",
+                "description": "Weekly Study Time"
+            }
+        ],
+        "values": {
+            "1": "< 2 hours",
+            "2": "2 to 5 hours",
+            "3": "5 to 10 hours",
+            "4": "> 10 hours"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "failures",
+                "description": "Number of Past Class Failures"
+            }
+        ],
+        "values": {
+            "0": "No Failures",
+            "1": "1 Failure",
+            "2": "2 Failures",
+            "3": "3 Failures"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "schoolsup",
+                "description": "Extra Educational Support"
+            },
+            {
+                "key": "famsup",
+                "description": "Family Educational Support"
+            },
+            {
+                "key": "paid",
+                "description": "Extra Paid Classes"
+            },
+            {
+                "key": "activities",
+                "description": "Extra-curricular Activities"
+            },
+            {
+                "key": "nursery",
+                "description": "Attended Nursery School"
+            },
+            {
+                "key": "higher",
+                "description": "Wants to Take Higher Education"
+            },
+            {
+                "key": "internet",
+                "description": "Internet Access at Home"
+            },
+            {
+                "key": "romantic",
+                "description": "In a Romantic Relationship"
+            }
+        ],
+        "values": {
+            "yes": "Yes",
+            "no": "No"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "famrel",
+                "description": "Quality of Family Relationships"
+            },
+            {
+                "key": "health",
+                "description": "Current Health Status"
+            }
+        ],
+        "values": {
+            "1": "Very Bad",
+            "2": "Bad",
+            "3": "Ok",
+            "4": "Good",
+            "5": "Very Good"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "freetime",
+                "description": "Free Time After School"
+            },
+            {
+                "key": "goout",
+                "description": "Going Out with Friends"
+            },
+            {
+                "key": "Dalc",
+                "description": "Workday Alcohol Consumption"
+            },
+            {
+                "key": "Walc",
+                "description": "Weekend Alcohol Consumption"
+            }
+        ],
+        "values": {
+            "1": "Very Low",
+            "2": "Low",
+            "3": "Moderate",
+            "4": "High",
+            "5": "Very High"
+        }
+    },
+    {
+        "attributes": [
+            {
+                "key": "absences",
+                "description": "Number of School Absences"
+            }
+        ]
+    },
+    {
+        "attributes": [
+            {
+                "key": "G1",
+                "description": "First Period Grade"
+            },
+            {
+                "key": "G2",
+                "description": "Second Period Grade"
+            },
+            {
+                "key": "G3",
+                "description": "Final Grade"
+            }
+        ]
+    }
+]

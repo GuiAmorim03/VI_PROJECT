@@ -72,7 +72,7 @@ function updateBarChart(column) {
     const combinedData = [...groupedDataPortuguese, ...groupedDataMath];
 
 
-    const width = 900;
+    const width = 800;
     const height = 550;
     const margin = { top: 20, right: 30, bottom: 50, left: 50 };
 
@@ -120,6 +120,15 @@ function updateBarChart(column) {
         .attr("class", "barGroup")
         .attr("transform", d => `translate(${x0(d)},0)`);
 
+    const tooltip = d3.select("body")
+        .append("div")
+        .style("position", "absolute")
+        .style("padding", "6px")
+        .style("background", "lightgray")
+        .style("border-radius", "4px")
+        .style("pointer-events", "none")
+        .style("opacity", 0);
+
     barGroups.selectAll("rect")
         .data(d => combinedData.filter(cd => cd.key === d))
         .enter()
@@ -128,8 +137,18 @@ function updateBarChart(column) {
         .attr("y", d => y(d.value))
         .attr("width", x1.bandwidth())
         .attr("height", d => height - margin.top - margin.bottom - y(d.value))
-        .attr("fill", d => color(d.subject));
-
+        .attr("fill", d => color(d.subject))
+        .on("mouseover", function (event, d) {
+            tooltip.style("opacity", 1)
+                .html(`${d.value.toFixed(2)}`);
+        })
+        .on("mousemove", function (event) {
+            tooltip.style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 20) + "px");
+        })
+        .on("mouseout", function () {
+            tooltip.style("opacity", 0);
+        });
 
     d3.select("#legend").selectAll("div").remove();
     const legend = d3.select("#legend");

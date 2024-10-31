@@ -35,12 +35,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const navLinks = document.querySelectorAll(".nav-link");
     const currentPath = window.location.pathname.split("StudentsPerformance/")[1];
     navLinks.forEach(link => {
-        console.log(link);
-        console.log(currentPath);
-        if (link == currentPath) {
+        var linkPath = link.href.split("StudentsPerformance/")[1];
+        if (linkPath == currentPath) {
             link.classList.add("active");
         } else {
-            if (link == "index" && currentPath == "") {
+            if (linkPath == "index" && currentPath == "") {
                 link.classList.add("active");
             } else {
                 link.classList.remove("active");

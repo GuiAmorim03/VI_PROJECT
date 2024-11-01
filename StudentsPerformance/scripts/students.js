@@ -10,7 +10,9 @@ let mappingData;
 d3.json("../student_data/student-data-convert-description.json").then(mapping => {
     mappingData = mapping;
 
+    // aqui vou usar o ficheiro de portugues porque é o que contem todos os alunos do estudo
     d3.csv("../student_data/student-por-d3.csv").then(data => {
+    // d3.csv("../student_data/merged_grades.csv").then(data => {
 
         const radioContainer = d3.select("#radioContainer");
         columns.forEach((column, index) => {
@@ -51,6 +53,9 @@ function updatePieChart(data, column) {
         data,
         v => v.length,
         d => d[column]
+        // d => column == "studytime" ? Math.round((+d.studytime_por + +d.studytime_mat) / 2) 
+        //     : column == "paid" ? d.paid_por === "yes" || d.paid_mat === "yes" ? "yes" : "no" 
+        //     : d[column]
     );
 
     const valueOrder = attribute.values ? Object.keys(attribute.values) : counts.map(([key]) => key).sort();

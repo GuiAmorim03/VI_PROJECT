@@ -4,18 +4,17 @@ const columns = [
     "paid", "activities", "nursery", "higher", "internet", "romantic"
 ];
 
-let dataPortuguese, dataMath;
+let mergedData;
 
 // Criei um json para mapear códigos para descrições, para ser mais percetivel
 d3.json("../student_data/student-data-convert-description.json").then(mapping => {
     mappingData = mapping;
 
     Promise.all([
-        d3.csv("../student_data/student-por-d3.csv"), 
-        d3.csv("../student_data/student-mat-d3.csv")
+        // aqui vou usar o ficheiro de merge para não ter mais notas de portugues do que de matematica
+        d3.csv("../student_data/merged_grades.csv")
     ]).then(datasets => {
-        dataPortuguese = datasets[0];
-        dataMath = datasets[1];
+        mergedData = datasets[0];
 
         const radioContainer = d3.select("#radioContainer");
         columns.forEach((column, index) => {
@@ -38,11 +37,10 @@ d3.json("../student_data/student-data-convert-description.json").then(mapping =>
         d3.selectAll("input[name='columnRadio']").on("change", function () {
             const selectedColumn = this.value;
             updateBarChart(selectedColumn);
-            updateScatterPlot(selectedColumn);
         });
     
         updateBarChart(columns[0]);
-        updateScatterPlot(columns[0]);
+        updateScatterPlot();
     });
 });
 
@@ -55,20 +53,26 @@ function updateBarChart(column) {
 
     const attribute = getAttribute(column);
 
+    let column_por = column;
+    let column_mat = column;
+    if (column === "paid" || column === "studytime") {
+        column_por = column+"_por";
+        column_mat = column+"_mat";
+    }
+
     const groupedDataPortuguese = d3.rollups(
-        dataPortuguese,
-        v => d3.mean(v, d => +d.G3),
-        d => d[column]
+        mergedData,
+        v => d3.mean(v, d => +d.G3_por),
+        d => d[column_por]
     ).map(([key, value]) => ({ key, subject: "Portuguese", value }));
 
     const groupedDataMath = d3.rollups(
-        dataMath,
-        v => d3.mean(v, d => +d.G3),
-        d => d[column]
+        mergedData,
+        v => d3.mean(v, d => +d.G3_mat),
+        d => d[column_mat]
     ).map(([key, value]) => ({ key, subject: "Math", value }));
 
     const valueOrder = attribute.values ? Object.keys(attribute.values) : groupedDataPortuguese.map(d => d.key).sort();
-
     groupedDataPortuguese.sort((a, b) => valueOrder.indexOf(a.key) - valueOrder.indexOf(b.key));
     groupedDataMath.sort((a, b) => valueOrder.indexOf(a.key) - valueOrder.indexOf(b.key));
     const combinedData = [...groupedDataPortuguese, ...groupedDataMath];
@@ -171,22 +175,21 @@ function updateBarChart(column) {
     });
 }
 
-function updateScatterPlot(column) {
-    const attribute = getAttribute(column);
-
-    const scatterDataMath = d3.rollups(
-        dataMath,
-        v => v.length,
-        d => +d.G3
-    ).map(([grade, count]) => ({ grade, count }));
+function updateScatterPlot() {
 
     const scatterDataPort = d3.rollups(
-        dataPortuguese,
+        mergedData,
         v => v.length,
-        d => +d.G3
+        d => +d.G3_por
     ).map(([grade, count]) => ({ grade, count }));
 
-    const scatterWidth = 1400;
+    const scatterDataMath = d3.rollups(
+        mergedData,
+        v => v.length,
+        d => +d.G3_mat
+    ).map(([grade, count]) => ({ grade, count }));
+
+    const scatterWidth = 1200;
     const scatterHeight = 800;
     const scatterMargin = { top: 20, right: 30, bottom: 50, left: 50 };
 
@@ -200,8 +203,7 @@ function updateScatterPlot(column) {
         .attr("transform", `translate(${scatterMargin.left},${scatterMargin.top})`);
 
     const x = d3.scaleLinear()
-        // .domain([0, d3.max(scatterData, d => d.count) + 1])
-        .domain([0, 120])
+        .domain([0, 100])
         .range([0, scatterWidth - scatterMargin.left - scatterMargin.right]);
 
     const y = d3.scaleLinear()

@@ -174,24 +174,24 @@ function updateBarChart(column) {
 function updateScatterPlot(column) {
     const attribute = getAttribute(column);
 
-    const scatterData = dataPortuguese.map(d => ({
-        key: d[column],
-        absences: +d.absences,
-        value: +d.G3
-    }));
+    const scatterDataMath = d3.rollups(
+        dataMath,
+        v => v.length,
+        d => +d.G3
+    ).map(([grade, count]) => ({ grade, count }));
 
-    const uniqueValues = Array.from(new Set(scatterData.map(d => d.key)));
-    const colorScale = d3.scaleOrdinal()
-        .domain(uniqueValues)
-        .range(d3.schemeCategory10);
+    const scatterDataPort = d3.rollups(
+        dataPortuguese,
+        v => v.length,
+        d => +d.G3
+    ).map(([grade, count]) => ({ grade, count }));
 
-    const scatterWidth = 800;
-    const scatterHeight = 300;
+    const scatterWidth = 1400;
+    const scatterHeight = 800;
     const scatterMargin = { top: 20, right: 30, bottom: 50, left: 50 };
 
     d3.select("#scatter").select("svg").remove();
 
-    // Cria SVG para scatter plot
     const scatterSvg = d3.select("#scatter")
         .append("svg")
         .attr("width", scatterWidth)
@@ -200,45 +200,42 @@ function updateScatterPlot(column) {
         .attr("transform", `translate(${scatterMargin.left},${scatterMargin.top})`);
 
     const x = d3.scaleLinear()
-        .domain([0, 30])
+        // .domain([0, d3.max(scatterData, d => d.count) + 1])
+        .domain([0, 120])
         .range([0, scatterWidth - scatterMargin.left - scatterMargin.right]);
 
     const y = d3.scaleLinear()
-        .domain([0, 20]).nice()
+        .domain([0, 20])
         .range([scatterHeight - scatterMargin.top - scatterMargin.bottom, 0]);
 
     scatterSvg.append("g")
-        .attr("transform", `translate(0,${scatterHeight - scatterMargin.top - scatterMargin.bottom})`)
-        .call(d3.axisBottom(x).ticks(10).tickFormat(d => d));
+        .call(d3.axisLeft(y).ticks(21).tickFormat(d3.format("d")));
 
     scatterSvg.append("g")
-        .call(d3.axisLeft(y));
+        .attr("transform", `translate(0,${scatterHeight - scatterMargin.top - scatterMargin.bottom})`)
+        .call(d3.axisBottom(x).ticks(5).tickFormat(d3.format("d")));
 
-    scatterSvg.selectAll("circle")
-        .data(scatterData)
-        .enter()
-        .append("circle")
-        .attr("cx", d => x(d.absences))
-        .attr("cy", d => y(d.value))
-        .attr("r", 5)
-        .attr("fill", d => colorScale(d.key))
-        .attr("opacity", 0.7);
 
-    d3.select("#scatterLegend").selectAll("div").remove();
-    const scatterLegend = d3.select("#scatterLegend");
+    scatterDataPort.forEach(({ grade, count }) => {
+        for (let i = 0; i < count; i++) {
+            scatterSvg.append("circle")
+                .attr("cx", x(i + 0.5))
+                .attr("cy", y(grade) - 5)
+                .attr("r", 5)
+                .attr("fill", "blue")
+                .attr("opacity", 1);
+        }
+    });
 
-    uniqueValues.forEach(value => {
-        const legendItem = scatterLegend.append("div")
-            .style("display", "flex")
-            .style("align-items", "center")
-            .style("margin", "5px");
 
-        legendItem.append("div")
-            .style("width", "15px")
-            .style("height", "15px")
-            .style("background-color", colorScale(value))
-            .style("margin-right", "5px");
-
-        legendItem.append("span").text(attribute.values ? attribute.values[value] : value);
+    scatterDataMath.forEach(({ grade, count }) => {
+        for (let i = 0; i < count; i++) {
+            scatterSvg.append("circle")
+                .attr("cx", x(i + 0.5))
+                .attr("cy", y(grade) + 5)
+                .attr("r", 5)
+                .attr("fill", "orange")
+                .attr("opacity", 1);
+        }
     });
 }

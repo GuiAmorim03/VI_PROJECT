@@ -1,6 +1,6 @@
 const columns = [
-    "school", "sex", "age", "address", "Pstatus", "Medu", "Fedu", "Mjob", 
-    "Fjob", "reason", "guardian", "traveltime", "studytime", 
+    "school", "sex", "age", "address", "Pstatus", "Medu", "Fedu", "Mjob",
+    "Fjob", "reason", "guardian", "traveltime", "studytime",
     "paid", "activities", "nursery", "higher", "internet", "romantic"
 ];
 
@@ -15,6 +15,14 @@ d3.json("../student_data/student-data-convert-description.json").then(mapping =>
         d3.csv("../student_data/merged_grades.csv")
     ]).then(datasets => {
         mergedData = datasets[0];
+        
+        let mergedData_temp = [];
+        mergedData.forEach((d, index) => {
+            if (d.G3_mat !== "0" || d.G3_por !== "0") {
+                mergedData_temp.push(d);
+            }
+        });
+        mergedData = mergedData_temp;
 
         const radioContainer = d3.select("#radioContainer");
         columns.forEach((column, index) => {
@@ -25,20 +33,20 @@ d3.json("../student_data/student-data-convert-description.json").then(mapping =>
                 .attr("value", column)
                 .attr("id", column)
                 .property("checked", index === 0);
-    
+
             radioContainer.append("label")
                 .attr("for", column)
                 .style("margin-left", "5px")
                 .text(description);
-    
+
             radioContainer.append("br");
         });
-    
+
         d3.selectAll("input[name='columnRadio']").on("change", function () {
             const selectedColumn = this.value;
             updateBarChart(selectedColumn);
         });
-    
+
         updateBarChart(columns[0]);
         updateScatterPlot();
     });
@@ -56,8 +64,8 @@ function updateBarChart(column) {
     let column_por = column;
     let column_mat = column;
     if (column === "paid" || column === "studytime") {
-        column_por = column+"_por";
-        column_mat = column+"_mat";
+        column_por = column + "_por";
+        column_mat = column + "_mat";
     }
 
     const groupedDataPortuguese = d3.rollups(
@@ -119,6 +127,22 @@ function updateBarChart(column) {
         .attr("class", "axis")
         .call(d3.axisLeft(y));
 
+    svg.append("text")
+        .attr("class", "x-axis-title")
+        .attr("x", (width - margin.left - margin.right) / 2)
+        .attr("y", height - margin.bottom + 25)  
+        .style("text-anchor", "middle")
+        .style("font-size", "18px")
+        .text(getAttribute(column).attributes.find(attribute => attribute.key === column).description);
+
+    svg.append("text")
+        .attr("class", "y-axis-title")
+        .attr("x", -(height - margin.top - margin.bottom) / 2)
+        .attr("y", -margin.left + 15)  
+        .attr("transform", "rotate(-90)")
+        .style("text-anchor", "middle")
+        .style("font-size", "18px")
+        .text("Final Grade");
 
     const barGroups = svg.selectAll(".barGroup")
         .data(groupedDataPortuguese.map(d => d.key))
@@ -173,6 +197,24 @@ function updateBarChart(column) {
 
         legendItem.append("span").text(subject);
     });
+
+    d3.select("#scatterLegend").selectAll("div").remove();
+    const scatterLegend = d3.select("#scatterLegend");
+
+    ["Portuguese", "Math"].forEach(subject => {
+        const scatterLegendItem = scatterLegend.append("div")
+            .style("display", "flex")
+            .style("align-items", "center")
+            .style("margin", "5px");
+
+        scatterLegendItem.append("div")
+            .style("width", "15px")
+            .style("height", "15px")
+            .style("background-color", color(subject))
+            .style("margin-right", "5px");
+
+        scatterLegendItem.append("span").text(subject);
+    });
 }
 
 function updateScatterPlot() {
@@ -217,6 +259,22 @@ function updateScatterPlot() {
         .attr("transform", `translate(0,${scatterHeight - scatterMargin.top - scatterMargin.bottom})`)
         .call(d3.axisBottom(x).ticks(5).tickFormat(d3.format("d")));
 
+    scatterSvg.append("text")
+        .attr("class", "x-axis-title")
+        .attr("x", (scatterWidth - scatterMargin.left - scatterMargin.right) / 2)
+        .attr("y", scatterHeight - scatterMargin.bottom + 20)
+        .style("text-anchor", "middle")
+        .style("font-size", "18px")
+        .text("Number of Students");
+
+    scatterSvg.append("text")
+        .attr("class", "y-axis-title")
+        .attr("x", -(scatterHeight - scatterMargin.top - scatterMargin.bottom) / 2)
+        .attr("y", -scatterMargin.left + 15)
+        .attr("transform", "rotate(-90)")
+        .style("text-anchor", "middle")
+        .style("font-size", "18px")
+        .text("Final Grade");
 
     scatterDataPort.forEach(({ grade, count }) => {
         for (let i = 0; i < count; i++) {

@@ -62,18 +62,17 @@ document.addEventListener("DOMContentLoaded", function () {
 function handleChangeSchool() {
     sessionStorage.setItem("selectedSchool", document.getElementById("selected-school").value)
 
-    let selectedStudentsFilter = sessionStorage.getItem("selectedStudentsFilter") || "school";
-    let selectedGradesFilter = sessionStorage.getItem("selectedGradesFilter") || "school";
+    let selectedFilter = Array.from(document.getElementsByName("columnRadio")).find(radio => radio.checked).value
 
     // Tenta atualizar os gráficos, ignorando caso alguma função não esteja definida
     try {
-        updatePieChart(selectedStudentsFilter);
+        updatePieChart(selectedFilter);
     } catch (error) {
         console.warn("Função updatePieChart é apenas nos Students");
     }
 
     try {
-        updateBarChart(selectedGradesFilter);
+        updateBarChart(selectedFilter);
         updateScatterPlot();
     } catch (error) {
         console.warn("Função updateBarChart e updateScatterPlot são apenas para Grades");

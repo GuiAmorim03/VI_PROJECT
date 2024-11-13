@@ -1,5 +1,5 @@
 const columns = [
-    "school", "sex", "age", "address", "Pstatus", "Medu", "Fedu", "Mjob",
+    "sex", "age", "address", "Pstatus", "Medu", "Fedu", "Mjob",
     "Fjob", "reason", "guardian", "traveltime", "studytime",
     "paid", "activities", "nursery", "higher", "internet", "romantic"
 ];

@@ -73,9 +73,9 @@ function handleChangeSchool() {
 
     try {
         updateBarChart(selectedFilter);
-        updateScatterPlot();
+        updateFrequencyPlot();
     } catch (error) {
-        console.warn("Função updateBarChart e updateScatterPlot são apenas para Grades");
+        console.warn("Função updateBarChart e updateFrequencyPlot são apenas para Grades");
     }
 }
 

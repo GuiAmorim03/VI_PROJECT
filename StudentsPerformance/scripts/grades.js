@@ -48,7 +48,7 @@ d3.json("../student_data/student-data-convert-description.json").then(mapping =>
         });
 
         updateBarChart(columns[0]);
-        updateScatterPlot();
+        updateFrequencyPlot();
     });
 });
 
@@ -92,7 +92,7 @@ function updateBarChart(column) {
 
 
     const width = 800;
-    const height = 550;
+    const height = 450;
     const margin = { top: 20, right: 30, bottom: 50, left: 50 };
 
     d3.select("#chart").select("svg").remove();
@@ -203,26 +203,26 @@ function updateBarChart(column) {
         legendItem.append("span").text(subject);
     });
 
-    d3.select("#scatterLegend").selectAll("div").remove();
-    const scatterLegend = d3.select("#scatterLegend");
+    d3.select("#frequencyLegend").selectAll("div").remove();
+    const frequencyLegend = d3.select("#frequencyLegend");
 
     ["Portuguese", "Math"].forEach(subject => {
-        const scatterLegendItem = scatterLegend.append("div")
+        const frequencyLegendItem = frequencyLegend.append("div")
             .style("display", "flex")
             .style("align-items", "center")
             .style("margin", "5px");
 
-        scatterLegendItem.append("div")
+        frequencyLegendItem.append("div")
             .style("width", "15px")
             .style("height", "15px")
             .style("background-color", color(subject))
             .style("margin-right", "5px");
 
-        scatterLegendItem.append("span").text(subject);
+        frequencyLegendItem.append("span").text(subject);
     });
 }
 
-function updateScatterPlot() {
+function updateFrequencyPlot() {
 
     const selectedSchool = sessionStorage.getItem("selectedSchool");
     let filteredMergedData = mergedData
@@ -230,66 +230,66 @@ function updateScatterPlot() {
         filteredMergedData = filterDataBySchool(mergedData, selectedSchool)
     }
 
-    const scatterDataPort = d3.rollups(
+    const frequencyDataPort = d3.rollups(
         filteredMergedData,
         v => v.length,
         d => +d.G3_por
     ).map(([grade, count]) => ({ grade, count }));
 
-    const scatterDataMath = d3.rollups(
+    const frequencyDataMath = d3.rollups(
         filteredMergedData,
         v => v.length,
         d => +d.G3_mat
     ).map(([grade, count]) => ({ grade, count }));
 
-    const scatterWidth = 1200;
-    const scatterHeight = 800;
-    const scatterMargin = { top: 20, right: 30, bottom: 50, left: 50 };
+    const frequencyWidth = 1200;
+    const frequencyHeight = 700;
+    const frequencyMargin = { top: 20, right: 30, bottom: 50, left: 50 };
 
-    d3.select("#scatter").select("svg").remove();
+    d3.select("#frequency").select("svg").remove();
 
-    const scatterSvg = d3.select("#scatter")
+    const frequencySvg = d3.select("#frequency")
         .append("svg")
-        .attr("width", scatterWidth)
-        .attr("height", scatterHeight)
+        .attr("width", frequencyWidth)
+        .attr("height", frequencyHeight)
         .append("g")
-        .attr("transform", `translate(${scatterMargin.left},${scatterMargin.top})`);
+        .attr("transform", `translate(${frequencyMargin.left},${frequencyMargin.top})`);
 
     const x = d3.scaleLinear()
         .domain([0, 100])
-        .range([0, scatterWidth - scatterMargin.left - scatterMargin.right]);
+        .range([0, frequencyWidth - frequencyMargin.left - frequencyMargin.right]);
 
     const y = d3.scaleLinear()
         .domain([0, 20])
-        .range([scatterHeight - scatterMargin.top - scatterMargin.bottom, 0]);
+        .range([frequencyHeight - frequencyMargin.top - frequencyMargin.bottom, 0]);
 
-    scatterSvg.append("g")
+    frequencySvg.append("g")
         .call(d3.axisLeft(y).ticks(21).tickFormat(d3.format("d")));
 
-    scatterSvg.append("g")
-        .attr("transform", `translate(0,${scatterHeight - scatterMargin.top - scatterMargin.bottom})`)
+    frequencySvg.append("g")
+        .attr("transform", `translate(0,${frequencyHeight - frequencyMargin.top - frequencyMargin.bottom})`)
         .call(d3.axisBottom(x).ticks(5).tickFormat(d3.format("d")));
 
-    scatterSvg.append("text")
+    frequencySvg.append("text")
         .attr("class", "x-axis-title")
-        .attr("x", (scatterWidth - scatterMargin.left - scatterMargin.right) / 2)
-        .attr("y", scatterHeight - scatterMargin.bottom + 20)
+        .attr("x", (frequencyWidth - frequencyMargin.left - frequencyMargin.right) / 2)
+        .attr("y", frequencyHeight - frequencyMargin.bottom + 20)
         .style("text-anchor", "middle")
         .style("font-size", "18px")
         .text("Number of Students");
 
-    scatterSvg.append("text")
+    frequencySvg.append("text")
         .attr("class", "y-axis-title")
-        .attr("x", -(scatterHeight - scatterMargin.top - scatterMargin.bottom) / 2)
-        .attr("y", -scatterMargin.left + 15)
+        .attr("x", -(frequencyHeight - frequencyMargin.top - frequencyMargin.bottom) / 2)
+        .attr("y", -frequencyMargin.left + 15)
         .attr("transform", "rotate(-90)")
         .style("text-anchor", "middle")
         .style("font-size", "18px")
         .text("Final Grade");
 
-    scatterDataPort.forEach(({ grade, count }) => {
+    frequencyDataPort.forEach(({ grade, count }) => {
         for (let i = 0; i < count; i++) {
-            scatterSvg.append("circle")
+            frequencySvg.append("circle")
                 .attr("cx", x(i + 0.5))
                 .attr("cy", y(grade) - 5)
                 .attr("r", 5)
@@ -299,9 +299,9 @@ function updateScatterPlot() {
     });
 
 
-    scatterDataMath.forEach(({ grade, count }) => {
+    frequencyDataMath.forEach(({ grade, count }) => {
         for (let i = 0; i < count; i++) {
-            scatterSvg.append("circle")
+            frequencySvg.append("circle")
                 .attr("cx", x(i + 0.5))
                 .attr("cy", y(grade) + 5)
                 .attr("r", 5)

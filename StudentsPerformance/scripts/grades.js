@@ -58,6 +58,11 @@ function getAttribute(columnKey) {
 
 
 function updateBarChart(column) {
+    const selectedSchool = sessionStorage.getItem("selectedSchool");
+    let filteredMergedData = mergedData
+    if (selectedSchool && selectedSchool != "") {
+        filteredMergedData = filterDataBySchool(mergedData, selectedSchool)
+    }
 
     const attribute = getAttribute(column);
 
@@ -69,13 +74,13 @@ function updateBarChart(column) {
     }
 
     const groupedDataPortuguese = d3.rollups(
-        mergedData,
+        filteredMergedData,
         v => d3.mean(v, d => +d.G3_por),
         d => d[column_por]
     ).map(([key, value]) => ({ key, subject: "Portuguese", value }));
 
     const groupedDataMath = d3.rollups(
-        mergedData,
+        filteredMergedData,
         v => d3.mean(v, d => +d.G3_mat),
         d => d[column_mat]
     ).map(([key, value]) => ({ key, subject: "Math", value }));
@@ -219,14 +224,20 @@ function updateBarChart(column) {
 
 function updateScatterPlot() {
 
+    const selectedSchool = sessionStorage.getItem("selectedSchool");
+    let filteredMergedData = mergedData
+    if (selectedSchool && selectedSchool != "") {
+        filteredMergedData = filterDataBySchool(mergedData, selectedSchool)
+    }
+
     const scatterDataPort = d3.rollups(
-        mergedData,
+        filteredMergedData,
         v => v.length,
         d => +d.G3_por
     ).map(([grade, count]) => ({ grade, count }));
 
     const scatterDataMath = d3.rollups(
-        mergedData,
+        filteredMergedData,
         v => v.length,
         d => +d.G3_mat
     ).map(([grade, count]) => ({ grade, count }));

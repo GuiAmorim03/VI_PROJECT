@@ -15,6 +15,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto">
+                        <label class="nav-link" for="selected-school">School:</label>
+                        <select onchange="handleChangeSchool()" class="form-select form-select-sm border-1 shadow-none select-navbar" name="selected-school" id="selected-school">
+                            <option value="">All</option>
+                            <option value="GP">Gabriel Pereira</option>
+                            <option value="MS">Mouzinho da Silveira</option>
+                        </select>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="grades">Grades</a>
                         </li>
@@ -28,6 +36,11 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
 
     document.getElementById("navbar").innerHTML = navbarHTML;
+
+    const selectedValue = sessionStorage.getItem("selectedSchool");
+    if (selectedValue) {
+        document.getElementById("selected-school").value = selectedValue;
+    }
 
     const navLinks = document.querySelectorAll(".nav-link");
     const currentPath = window.location.pathname.split("StudentsPerformance/")[1];
@@ -44,3 +57,29 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+
+function handleChangeSchool() {
+    sessionStorage.setItem("selectedSchool", document.getElementById("selected-school").value)
+
+    let selectedStudentsFilter = sessionStorage.getItem("selectedStudentsFilter") || "school";
+    let selectedGradesFilter = sessionStorage.getItem("selectedGradesFilter") || "school";
+
+    // Tenta atualizar os gráficos, ignorando caso alguma função não esteja definida
+    try {
+        updatePieChart(selectedStudentsFilter);
+    } catch (error) {
+        console.warn("Função updatePieChart é apenas nos Students");
+    }
+
+    try {
+        updateBarChart(selectedGradesFilter);
+        updateScatterPlot();
+    } catch (error) {
+        console.warn("Função updateBarChart e updateScatterPlot são apenas para Grades");
+    }
+}
+
+function filterDataBySchool(originalData, selectedSchool) {
+    return originalData.filter((data) => data.school == selectedSchool)
+}

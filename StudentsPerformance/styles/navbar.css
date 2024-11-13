@@ -1,0 +1,8 @@
+.select-navbar {
+    background-color: #212529;
+    color: white;             
+}
+
+.select-navbar::after {
+    color: white;
+}

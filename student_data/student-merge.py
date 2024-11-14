@@ -1,7 +1,7 @@
 import pandas as pd
 
-mat = pd.read_csv('student-mat.csv', sep=';')
-por = pd.read_csv('student-por.csv', sep=';')
+mat = pd.read_csv('original_data/student-mat.csv', sep=';')
+por = pd.read_csv('original_data/student-por.csv', sep=';')
 
 
 merged_data = pd.merge(

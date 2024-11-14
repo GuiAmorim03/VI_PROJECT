@@ -11,9 +11,7 @@ let studentsData;
 d3.json("../student_data/student-data-convert-description.json").then(mapping => {
     mappingData = mapping;
 
-    // aqui vou usar o ficheiro de portugues porque é o que contem todos os alunos do estudo
-    d3.csv("../student_data/student-por-d3.csv").then(data => {
-    // d3.csv("../student_data/merged_grades.csv").then(data => {
+    d3.csv("../student_data/merged_grades.csv").then(data => {
         studentsData = data;
 
         const radioContainer = d3.select("#radioContainer");

@@ -45,15 +45,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const navLinks = document.querySelectorAll(".nav-link");
     const currentPath = window.location.pathname.split("StudentsPerformance/")[1];
     navLinks.forEach(link => {
-        var linkPath = link.href.split("StudentsPerformance/")[1];
-        if (linkPath == currentPath) {
-            link.classList.add("active");
-        } else {
-            if (linkPath == "index" && currentPath == "") {
+        try {
+            var linkPath = link.href.split("StudentsPerformance/")[1];
+            if (linkPath == currentPath) {
                 link.classList.add("active");
             } else {
-                link.classList.remove("active");
+                if (linkPath == "index" && currentPath == "") {
+                    link.classList.add("active");
+                } else {
+                    link.classList.remove("active");
+                }
             }
+        } catch (error) {
+            // nada
         }
     });
 });

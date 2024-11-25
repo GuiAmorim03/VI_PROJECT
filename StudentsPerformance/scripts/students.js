@@ -55,11 +55,26 @@ function updatePieChart(column) {
     }
     const attribute = getAttribute(column)
 
-    const counts = d3.rollups(
-        filteredData,
-        v => v.length,
-        d => d[column]
-    );
+    let counts;
+    if (column === "studytime") {
+        counts = d3.rollups(
+            filteredData,
+            v => v.length,
+            d => Math.round((+d["studytime_mat"] + +d["studytime_por"]) / 2)
+        );
+    } else if (column === "paid") {
+        counts = d3.rollups(
+            filteredData,
+            v => v.length,
+            d => d["paid_mat"] === "yes" || d["paid_por"] === "yes" ? "yes" : "no"
+        );
+    } else {
+        counts = d3.rollups(
+            filteredData,
+            v => v.length,
+            d => d[column]
+        );
+    }
 
     const valueOrder = attribute.values ? Object.keys(attribute.values) : counts.map(([key]) => key).sort();
     const pieData = counts
